@@ -1,14 +1,12 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const NotFoundError = require('../errors/not-found-error');
 const BadRequestError = require('../errors/bad-request-error');
 const UnauthorizedError = require('../errors/unauthorized-error');
 const EmailExistError = require('../errors/email-exist-error');
 const { MESSAGE } = require('../utils/consts');
+const getToken = require('../utils/getToken');
 require('dotenv').config();
-
-const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUser = (req, res, next) => {
   const { _id } = req.user;
@@ -68,13 +66,7 @@ const signIn = (req, res, next) => {
       if (!isLoggedIn) {
         throw new UnauthorizedError(MESSAGE.AUTH_FAILED);
       }
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        secure: true,
-        sameSite: true,
-      });
+      getToken(res, user);
       res.send({
         data: {
           _id: user._id,
@@ -99,13 +91,16 @@ const signUp = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((newUser) => res.status(201).send({
-      data: {
-        _id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-      },
-    }))
+    .then((newUser) => {
+      getToken(res, newUser);
+      res.status(201).send({
+        data: {
+          _id: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+        },
+      });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(MESSAGE.BAD_REQUEST));

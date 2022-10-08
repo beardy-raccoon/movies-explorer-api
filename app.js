@@ -13,7 +13,7 @@ const { DEV_DB_URL } = require('./utils/consts');
 
 require('dotenv').config();
 
-const { PORT = 3000, NODE_ENV, DB_URL } = process.env;
+const { PORT = 3001, NODE_ENV, DB_URL } = process.env;
 const app = express();
 
 app.use(express.json());

@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const axios = require('axios');
+const bcrypt = require('bcrypt');
 const User = require('../models/users');
 require('dotenv').config();
 
@@ -63,6 +64,11 @@ const getAuthData = async (req, res) => {
 
   const findedUser = await User.findOne({ email });
 
+  if (!findedUser) {
+    const hash = await bcrypt.hash('12345', 10);
+    const newUser = await User.create({ name, email, hash });
+    res.send({ newUser });
+  }
   res.send({ findedUser });
 };
 

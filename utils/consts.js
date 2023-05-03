@@ -12,7 +12,12 @@ const MESSAGE = {
 };
 
 const DEV_DB_URL = 'mongodb://localhost:27017/moviesdb';
+const API_URL = 'https://api.raccoondiploma.nomoredomains.sbs';
+const APP_URL = 'https://raccoondiploma.nomoredomains.sbs';
 
-const BASE_URL = 'https://api.raccoondiploma.nomoredomains.sbs';
-
-module.exports = { MESSAGE, DEV_DB_URL, BASE_URL };
+module.exports = {
+  MESSAGE,
+  DEV_DB_URL,
+  API_URL,
+  APP_URL,
+};

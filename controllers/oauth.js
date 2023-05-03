@@ -19,7 +19,7 @@ const handleOauth = (req, res, next) => {
     access_type: 'offline',
     scope: scopes,
   });
-  res.send({ message: url });
+  res.redirect(url);
   next();
 };
 

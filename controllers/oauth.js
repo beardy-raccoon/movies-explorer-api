@@ -18,6 +18,7 @@ const getAuthUrl = (req, res, next) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,
+    prompt: 'consent',
   });
   res.redirect(url);
   next();
@@ -33,11 +34,7 @@ const checkResponse = (res) => {
 function getGoogle(tokens) {
   return fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     method: 'GET',
-    headers: {
-      Authorization: `Bearer ${tokens.access_token}`,
-      'Content-Type': 'application/json',
-      credentials: 'include',
-    },
+    headers: {'Authorization': 'Bearer ' + tokens.access_token, 'Content-Type': 'application/json' },
   }).then((res) => checkResponse(res));
 }
 

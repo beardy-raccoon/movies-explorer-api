@@ -30,7 +30,7 @@ app.use(corsConfig);
 
 app.get('/crash-test', crashTest);
 
-app.use('/oauth', handleOauth);
+app.get('/oauth', handleOauth);
 app.use('/', router);
 app.use(errorLogger);
 app.use(errors());

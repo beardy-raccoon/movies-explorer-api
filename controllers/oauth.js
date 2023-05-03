@@ -46,8 +46,16 @@ const getAuthData = async (req, res) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-  const userCredentials = tokens;
-  res.send({ userCredentials });
+  // const userCredentials = tokens;
+
+  const people = google.people('v1');
+  // retrieve user profile
+  const user = await people.people.get({
+    resourceName: 'people/me',
+    personFields: 'emailAddresses',
+  });
+
+  res.send({ message: user.data });
 };
 
 module.exports = {

@@ -49,6 +49,7 @@ const getAuthData = async (req, res, next) => {
   const authData = await axios({
     url: 'https://www.googleapis.com/oauth2/v2/userinfo',
     method: 'get',
+    headers: { 'Authorization': 'Bearer ' + tokens.access_token, 'Content-Type': 'application/json' },
   });
   await req.session.save();
   res.send({ authData });

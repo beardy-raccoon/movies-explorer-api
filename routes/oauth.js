@@ -15,7 +15,7 @@ const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
 ];
 
-router.get('/google', (req, res) => {
+router.get('oauth/google', (req, res) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,

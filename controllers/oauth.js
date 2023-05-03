@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const NotFoundError = require('../errors/not-found-error');
 const { MESSAGE } = require('../utils/consts');
+const getToken = require('../utils/getToken');
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
@@ -60,16 +61,30 @@ const getAuthData = async (req, res) => {
     headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
   });
 
-  const { id, email, name } = user.data;
+  const { email, name } = user.data;
 
   const findedUser = await User.findOne({ email });
 
   if (!findedUser) {
     const hash = await bcrypt.hash('12345', 10);
     const newUser = await User.create({ name, email, hash });
-    res.send({ newUser });
+    getToken(res, newUser);
+    res.status(201).send({
+      data: {
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+      },
+    });
   }
-  res.send({ findedUser });
+  getToken(res, findedUser);
+  res.status(201).send({
+    data: {
+      _id: findedUser._id,
+      name: findedUser.name,
+      email: findedUser.email,
+    },
+  });
 };
 
 module.exports = {

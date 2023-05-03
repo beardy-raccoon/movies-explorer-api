@@ -41,12 +41,12 @@ function getGoogle(tokens) {
 }
 
 const getAuthData = async (req, res, next) => {
-  const { code } = req.query;
+  const { code } = req.query.code;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-  getGoogle(tokens)
-    .then((authData) => res.send(authData))
-    .catch(next);
+  const authData = getGoogle(tokens);
+  res.send(authData);
+  next();
 };
 
 module.exports = {

@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-// const axios = require('axios');
+const axios = require('axios');
 require('dotenv').config();
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
@@ -48,13 +48,11 @@ const getAuthData = async (req, res) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-  // const userCredentials = tokens;
 
-  const people = google.people('v1');
-  // retrieve user profile
-  const user = await people.people.get({
-    resourceName: 'people/me',
-    personFields: 'emailAddresses',
+  const user = await axios({
+    url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+    method: 'get',
+    headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
   });
 
   res.send({ message: user.data });

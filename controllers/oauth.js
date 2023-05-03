@@ -59,7 +59,7 @@ const getAuthData = async (req, res) => {
     headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
   });
 
-  // const { id, email, name } = user.data;
+  const { id, email, name } = user.data;
 
   User.findOne(user.data.email)
     .then((findedUser) => {
@@ -75,7 +75,7 @@ const getAuthData = async (req, res) => {
       });
     });
 
-  // res.send({ message: user.data });
+  res.send({ id, email, name });
 };
 
 module.exports = {

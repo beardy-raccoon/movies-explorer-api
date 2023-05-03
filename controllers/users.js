@@ -26,6 +26,22 @@ const getUser = (req, res, next) => {
     .catch(next);
 };
 
+const deleteUser = (req, res, next) => {
+  const { _id } = req.user;
+  User.findByIdAndDelete(_id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError(MESSAGE.NOT_FOUND_USER);
+      }
+      res.send({
+        data: {
+          message: 'profile deleted',
+        },
+      });
+    })
+    .catch(next);
+};
+
 const updateUser = (req, res, next) => {
   const { name, email } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
@@ -115,6 +131,7 @@ const signUp = (req, res, next) => {
 
 module.exports = {
   getUser,
+  deleteUser,
   updateUser,
   signIn,
   signUp,

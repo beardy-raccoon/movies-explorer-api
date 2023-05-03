@@ -65,7 +65,7 @@ const getAuthData = async (req, res) => {
 
   if (!findedUser) {
     const hash = await bcrypt.hash('12345', 10);
-    const newUser = await User.create({ name, email, hash });
+    const newUser = await User.create({ name, email, password: hash });
     getToken(res, newUser);
     res.redirect(`${APP_URL}/profile`);
   }

@@ -46,7 +46,8 @@ const getAuthData = async (req, res) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-  res.send({ res: 'ok' });
+  const userCredentials = tokens;
+  res.send({ userCredentials });
 };
 
 module.exports = {

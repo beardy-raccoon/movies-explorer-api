@@ -3,6 +3,7 @@ const allowedCors = [
   'http://raccoondiploma.nomoredomains.sbs',
   'https://api.raccoondiploma.nomoredomains.sbs',
   'http://api.raccoondiploma.nomoredomains.sbs',
+  'https://www.googleapis.com/oauth2/v2/userinfo',
   'localhost:3000',
   'http://localhost:3000',
 ];

@@ -6,7 +6,7 @@ const getToken = require('../utils/getToken');
 const { API_URL, APP_URL } = require('../utils/consts');
 require('dotenv').config();
 
-const { CLIENT_ID, CLIENT_SECRET } = process.env;
+const { CLIENT_ID, CLIENT_SECRET, DEFAULT_PASSWORD } = process.env;
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -31,23 +31,6 @@ const getAuthUrl = (req, res, next) => {
   next();
 };
 
-/* const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-  throw new Error(res.status);
-}; */
-
-/* async function getGoogle(tokens) {
-  const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + tokens.access_token, 'Content-Type': 'application/json'
-    },
-  });
-  return checkResponse(res);
-} */
-
 const getAuthData = async (req, res) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
@@ -60,16 +43,15 @@ const getAuthData = async (req, res) => {
   });
 
   const { email, name } = user.data;
+  const foundUser = await User.findOne({ email });
 
-  const findedUser = await User.findOne({ email });
-
-  if (!findedUser) {
-    const hash = await bcrypt.hash('12345', 10);
+  if (!foundUser) {
+    const hash = await bcrypt.hash(DEFAULT_PASSWORD, 10);
     const newUser = await User.create({ name, email, password: hash });
     getToken(res, newUser);
     res.redirect(`${APP_URL}/profile`);
   }
-  getToken(res, findedUser);
+  getToken(res, foundUser);
   res.redirect(`${APP_URL}/movies`);
 };
 
@@ -77,11 +59,3 @@ module.exports = {
   getAuthUrl,
   getAuthData,
 };
-
-/*   res.status(201).send({
-    data: {
-      _id: findedUser._id,
-      name: findedUser.name,
-      email: findedUser.email,
-    },
-  }) */

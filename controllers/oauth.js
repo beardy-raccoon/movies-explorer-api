@@ -42,14 +42,14 @@ function getGoogle(tokens) {
 
 const getAuthData = async (req, res, next) => {
   const { code } = req.query;
-  /* const { tokens } = await oauth2Client.getToken(code);
-  oauth2Client.setCredentials(tokens);
+  const { tokens } = await oauth2Client.getToken(code);
+  /* oauth2Client.setCredentials(tokens);
   const authData = getGoogle(tokens);
   const user = authData.data;
   const { _id } = user;
   req.session.user = { _id };
   await req.session.save(); */
-  res.send({ code });
+  res.send({ tokens });
   next();
 };
 

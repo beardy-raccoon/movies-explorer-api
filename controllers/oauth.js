@@ -50,6 +50,7 @@ const getAuthData = async (req, res, next) => {
     url: 'https://www.googleapis.com/oauth2/v2/userinfo',
     method: 'get',
   });
+  await req.session.save();
   res.send({ authData });
   next();
 };

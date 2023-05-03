@@ -13,4 +13,6 @@ const MESSAGE = {
 
 const DEV_DB_URL = 'mongodb://localhost:27017/moviesdb';
 
-module.exports = { MESSAGE, DEV_DB_URL };
+const BASE_URL = 'https://api.raccoondiploma.nomoredomains.sbs';
+
+module.exports = { MESSAGE, DEV_DB_URL, BASE_URL };

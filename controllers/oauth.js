@@ -2,18 +2,16 @@ const { google } = require('googleapis');
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const User = require('../models/users');
-require('dotenv').config();
-
-const NotFoundError = require('../errors/not-found-error');
-const { MESSAGE } = require('../utils/consts');
 const getToken = require('../utils/getToken');
+const { BASE_URL } = require('../utils/consts');
+require('dotenv').config();
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
   CLIENT_SECRET,
-  'https://api.raccoondiploma.nomoredomains.sbs/oauth/google/redirect',
+  `${BASE_URL}/oauth/google/redirect`,
 );
 
 const scopes = [
@@ -58,7 +56,7 @@ const getAuthData = async (req, res) => {
   const user = await axios({
     url: 'https://www.googleapis.com/oauth2/v2/userinfo',
     method: 'get',
-    headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
   });
 
   const { email, name } = user.data;
@@ -69,10 +67,10 @@ const getAuthData = async (req, res) => {
     const hash = await bcrypt.hash('12345', 10);
     const newUser = await User.create({ name, email, hash });
     getToken(res, newUser);
-    res.redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
+    res.redirect(`${BASE_URL}/profile`);
   }
   getToken(res, findedUser);
-  res.redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
+  res.redirect(`${BASE_URL}/movies`);
 };
 
 module.exports = {

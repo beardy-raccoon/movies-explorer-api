@@ -61,21 +61,9 @@ const getAuthData = async (req, res) => {
 
   const { id, email, name } = user.data;
 
-  User.findOne(user.data.email)
-    .then((findedUser) => {
-      if (!findedUser) {
-        throw new NotFoundError(MESSAGE.NOT_FOUND_USER);
-      }
-      res.send({
-        data: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-        },
-      });
-    });
+  const findedUser = await User.findOne(email);
 
-  res.send({ id, email, name });
+  res.send({ findedUser });
 };
 
 module.exports = {

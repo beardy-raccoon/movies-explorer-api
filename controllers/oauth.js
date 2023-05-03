@@ -49,8 +49,7 @@ const getAuthData = async (req, res, next) => {
   const { _id } = user;
   req.session.user = { _id };
   await req.session.save(); */
-  res.send(code);
-  res.redirect('https://raccoondiploma.nomoredomains.sbs');
+  res.send({ code });
   next();
 };
 

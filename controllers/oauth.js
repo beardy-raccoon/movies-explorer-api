@@ -75,7 +75,7 @@ const getAuthData = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
       },
-    });
+    }).redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
   }
   getToken(res, findedUser);
   res.status(201).send({
@@ -84,7 +84,7 @@ const getAuthData = async (req, res) => {
       name: findedUser.name,
       email: findedUser.email,
     },
-  });
+  }).redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
 };
 
 module.exports = {

@@ -41,15 +41,15 @@ function getGoogle(tokens) {
 }
 
 const getAuthData = async (req, res, next) => {
-  /* const { code } = req.query.code;
-  const { tokens } = await oauth2Client.getToken(code);
+  const { code } = req.query.code;
+  /* const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
   const authData = getGoogle(tokens);
   const user = authData.data;
   const { _id } = user;
   req.session.user = { _id };
   await req.session.save(); */
-  res.send({ message: 'one more step' });
+  res.send(code);
   res.redirect('https://raccoondiploma.nomoredomains.sbs');
   next();
 };

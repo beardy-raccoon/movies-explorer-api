@@ -3,7 +3,7 @@ const axios = require('axios');
 const bcrypt = require('bcrypt');
 const User = require('../models/users');
 const getToken = require('../utils/getToken');
-const { BASE_URL } = require('../utils/consts');
+const { API_URL, APP_URL } = require('../utils/consts');
 require('dotenv').config();
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
@@ -11,7 +11,7 @@ const { CLIENT_ID, CLIENT_SECRET } = process.env;
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
   CLIENT_SECRET,
-  `${BASE_URL}/oauth/google/redirect`,
+  `${API_URL}/oauth/google/redirect`,
 );
 
 const scopes = [
@@ -67,10 +67,10 @@ const getAuthData = async (req, res) => {
     const hash = await bcrypt.hash('12345', 10);
     const newUser = await User.create({ name, email, hash });
     getToken(res, newUser);
-    res.redirect(`${BASE_URL}/profile`);
+    res.redirect(`${APP_URL}/profile`);
   }
   getToken(res, findedUser);
-  res.redirect(`${BASE_URL}/movies`);
+  res.redirect(`${APP_URL}/movies`);
 };
 
 module.exports = {

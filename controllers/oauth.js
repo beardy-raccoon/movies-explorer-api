@@ -45,7 +45,11 @@ const getAuthData = async (req, res, next) => {
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
   const authData = getGoogle(tokens);
-  res.send(authData);
+  const user = authData.data;
+  const { _id } = user;
+  req.session.user = { _id };
+  await req.session.save();
+  res.redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
   next();
 };
 

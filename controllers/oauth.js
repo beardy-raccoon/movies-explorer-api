@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const axios = require('axios')
 require('dotenv').config();
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
@@ -31,18 +32,23 @@ const checkResponse = (res) => {
   throw new Error(res.status);
 };
 
-function getGoogle(tokens) {
-  return fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+/* async function getGoogle(tokens) {
+  const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     method: 'GET',
-    headers: {'Authorization': 'Bearer ' + tokens.access_token, 'Content-Type': 'application/json' },
-  }).then((res) => checkResponse(res));
-}
+    headers: { 'Authorization': 'Bearer ' + tokens.access_token, 'Content-Type': 'application/json' },
+  });
+  return checkResponse(res);
+} */
 
 const getAuthData = async (req, res, next) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-  const authData = getGoogle(tokens);
+  const authData = await axios({
+    url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+    method: 'get',
+    headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
+  });
   res.send({ authData });
   next();
 };

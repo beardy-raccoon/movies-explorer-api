@@ -61,7 +61,7 @@ const getAuthData = async (req, res) => {
 
   const { id, email, name } = user.data;
 
-  const findedUser = await User.findOne(email);
+  const findedUser = await User.findOne({ email });
 
   res.send({ findedUser });
 };

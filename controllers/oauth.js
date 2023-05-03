@@ -1,6 +1,10 @@
 const { google } = require('googleapis');
 const axios = require('axios');
+const User = require('../models/users');
 require('dotenv').config();
+
+const NotFoundError = require('../errors/not-found-error');
+const { MESSAGE } = require('../utils/consts');
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
@@ -55,7 +59,23 @@ const getAuthData = async (req, res) => {
     headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
   });
 
-  res.send({ message: user.data });
+  const { id, email, name } = user.data;
+
+  User.findOne(email)
+    .then((findedUser) => {
+      if (!findedUser) {
+        throw new NotFoundError(MESSAGE.NOT_FOUND_USER);
+      }
+      res.send({
+        data: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    });
+
+  // res.send({ message: user.data });
 };
 
 module.exports = {

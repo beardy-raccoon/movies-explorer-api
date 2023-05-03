@@ -5,7 +5,7 @@ const { signupValidation, signinValidation } = require('../middlewares/validatio
 router.post('/signup', signupValidation, signUp);
 router.post('/signin', signinValidation, signIn);
 router.get(
-  '/oauth',
+  '/random',
   (req, res) => res.send({ message: 'handling route /oauth' }),
 );
 

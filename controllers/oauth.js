@@ -3,4 +3,4 @@ const handleOauth = (req, res, next) => {
   next();
 };
 
-module.exports = handleOauth;
+module.exports = { handleOauth };

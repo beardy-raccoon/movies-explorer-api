@@ -11,7 +11,7 @@ const errorHandler = require('./utils/errorHandler');
 const corsConfig = require('./middlewares/cors');
 const { DEV_DB_URL } = require('./utils/consts');
 
-const oauthHandler = require('./controllers/oauth');
+const { handleOauth } = require('./controllers/oauth');
 
 require('dotenv').config();
 
@@ -30,7 +30,7 @@ app.use(corsConfig);
 
 app.get('/crash-test', crashTest);
 
-app.use('/oauth', oauthHandler);
+app.use('/oauth', handleOauth);
 app.use('/', router);
 app.use(errorLogger);
 app.use(errors());

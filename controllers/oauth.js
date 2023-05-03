@@ -75,7 +75,7 @@ const getAuthData = async (req, res) => {
       });
     });
 
-  res.send({ message: user.data });
+  // res.send({ message: user.data });
 };
 
 module.exports = {

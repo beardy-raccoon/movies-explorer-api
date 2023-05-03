@@ -69,25 +69,21 @@ const getAuthData = async (req, res) => {
     const hash = await bcrypt.hash('12345', 10);
     const newUser = await User.create({ name, email, hash });
     getToken(res, newUser);
-    res.status(201).send({
-      data: {
-        _id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-      },
-    }).redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
+    res.redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
   }
   getToken(res, findedUser);
-  res.status(201).send({
-    data: {
-      _id: findedUser._id,
-      name: findedUser.name,
-      email: findedUser.email,
-    },
-  }).redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
+  res.redirect('https://raccoondiploma.nomoredomains.sbs/users/me');
 };
 
 module.exports = {
   getAuthUrl,
   getAuthData,
 };
+
+/*   res.status(201).send({
+    data: {
+      _id: findedUser._id,
+      name: findedUser.name,
+      email: findedUser.email,
+    },
+  }) */

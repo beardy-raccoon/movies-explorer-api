@@ -29,7 +29,7 @@ const getAuthUrl = (req, res, next) => {
     scope: scopes,
     include_granted_scopes: true,
   });
-  res.redirect(url);
+  res.writeHead(301, { Location: url });
   next();
 };
 

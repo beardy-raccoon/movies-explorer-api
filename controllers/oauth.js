@@ -41,7 +41,7 @@ function getGoogle(tokens) {
 }
 
 const getAuthData = async (req, res, next) => {
-  const { code } = req.query.code;
+  const { code } = req.query;
   /* const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
   const authData = getGoogle(tokens);

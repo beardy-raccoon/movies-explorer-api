@@ -21,7 +21,7 @@ const getAuthUrl = (req, res, next) => {
     scope: scopes,
     prompt: 'consent',
   });
-  res.redirect(url);
+  res.writeHead(301, { Location: url });
   next();
 };
 
@@ -42,18 +42,10 @@ const getAuthUrl = (req, res, next) => {
   return checkResponse(res);
 } */
 
-const getAuthData = async (req, res, next) => {
+const getAuthData = async (req, res) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-  const authData = await axios({
-    url: 'https://www.googleapis.com/oauth2/v2/userinfo',
-    method: 'get',
-    headers: { 'Authorization': 'Bearer ' + tokens.access_token, 'Content-Type': 'application/json' },
-  });
-  await req.session.save();
-  res.send({ authData });
-  next();
 };
 
 module.exports = {

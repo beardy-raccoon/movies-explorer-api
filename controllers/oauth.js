@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const axios = require('axios');
+// const axios = require('axios');
 require('dotenv').config();
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
@@ -19,9 +19,9 @@ const getAuthUrl = (req, res, next) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,
-    prompt: 'consent',
+    include_granted_scopes: true,
   });
-  res.writeHead(301, { Location: url });
+  res.redirect(url);
   next();
 };
 
@@ -46,6 +46,7 @@ const getAuthData = async (req, res) => {
   const { code } = req.query;
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
+  res.send({ res: 'ok' });
 };
 
 module.exports = {

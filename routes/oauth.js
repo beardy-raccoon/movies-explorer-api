@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const { handleOauth } = require('../controllers/oauth');
+const { getAuthUrl, getAuthData } = require('../controllers/oauth');
 
-router.get('/google', handleOauth);
+router.get('/google', getAuthUrl);
+router.get('/redirect', getAuthData);
 
 module.exports = router;

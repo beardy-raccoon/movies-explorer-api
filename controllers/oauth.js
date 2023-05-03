@@ -14,7 +14,7 @@ const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
 ];
 
-const handleOauth = (req, res, next) => {
+const getAuthUrl = (req, res, next) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,
@@ -23,4 +23,33 @@ const handleOauth = (req, res, next) => {
   next();
 };
 
-module.exports = { handleOauth };
+const checkResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  throw new Error(res.status);
+};
+
+function getGoogle(tokens) {
+  return fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${tokens.access_token}`,
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => checkResponse(res));
+}
+
+const getAuthData = async (req, res, next) => {
+  const { code } = req.query;
+  const { tokens } = await oauth2Client.getToken(code);
+  oauth2Client.setCredentials(tokens);
+  getGoogle(tokens)
+    .then((authData) => res.send(authData))
+    .catch(next);
+};
+
+module.exports = {
+  getAuthUrl,
+  getAuthData,
+};

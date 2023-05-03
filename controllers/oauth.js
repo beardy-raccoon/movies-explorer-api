@@ -59,9 +59,9 @@ const getAuthData = async (req, res) => {
     headers: { 'Authorization': 'Bearer ' + tokens.access_token, "Content-Type": "application/json" },
   });
 
-  const { id, email, name } = user.data;
+  // const { id, email, name } = user.data;
 
-  User.findOne(email)
+  User.findOne(user.data.email)
     .then((findedUser) => {
       if (!findedUser) {
         throw new NotFoundError(MESSAGE.NOT_FOUND_USER);
@@ -75,7 +75,7 @@ const getAuthData = async (req, res) => {
       });
     });
 
-  // res.send({ message: user.data });
+  res.send({ message: user.data });
 };
 
 module.exports = {

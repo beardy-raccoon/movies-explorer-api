@@ -11,7 +11,7 @@ const errorHandler = require('./utils/errorHandler');
 const corsConfig = require('./middlewares/cors');
 const { DEV_DB_URL } = require('./utils/consts');
 
-const oauthHandler = require('./routes/oauth');
+const oauthHandler = require('./controllers/oauth');
 
 require('dotenv').config();
 

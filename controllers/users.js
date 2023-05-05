@@ -81,15 +81,16 @@ const signIn = (req, res, next) => {
     .then(([user, isLoggedIn]) => {
       if (!isLoggedIn) {
         throw new UnauthorizedError(MESSAGE.AUTH_FAILED);
+      } else {
+        getToken(res, user);
+        res.send({
+          data: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+          },
+        });
       }
-      getToken(res, user);
-      res.send({
-        data: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-        },
-      });
     })
     .catch(next);
 };
